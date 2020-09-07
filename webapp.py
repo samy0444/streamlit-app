@@ -5,6 +5,8 @@ from PIL import Image,ImageEnhance
 import numpy as np 
 import os
 
+st.set_option('deprecation.showfileUploaderEncoding', False)
+
 @st.cache
 def load_image(img):
 	im= Image.open(img)
@@ -113,10 +115,10 @@ def main():
 			blur_img=cv2.GaussianBlur((img),(11,11),blur_rate)
 			st.image(blur_img)
 
-		elif enhance_type == 'Original':
-			st.image(our_image,width=300)
-		else:
-			st.image(our_image,width=300)
+		#elif enhance_type == 'Original':
+			#st.image(our_image,width=300)
+		#else:
+			#st.image(our_image,width=300)
 
 
 		# Face detection
