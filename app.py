@@ -6,48 +6,72 @@ import numpy as np
 import os
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
+st.write(st.config.get_option("server.enableCORS"))
 
-@st.cache
-def load_image(img):
-	im= Image.open(img)
-	return im
+#@st.cache
+#def load_image(img):
+	#im= Image.open(img)
+	#return im
+try:
+	face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
+	eye_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_eye.xml')
+	smile_cascade= cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_smile.xml')
+except Exception:
+    st.write("Error loading cascade classifiers")
 
-face_cascade=cv2.CascadeClassifier('haar-data/haarcascade_frontalface_default.xml')
-eye_cascade=cv2.CascadeClassifier('haar-data/haarcascade_eye.xml')
-smile_cascade= cv2.CascadeClassifier('haar-data/haarcascade_smile.xml')
 
 def detect_faces(our_image):
-	new_img = np.array(our_image.convert('RGB'))
+	newimg = np.array(our_image.convert('RGB'))
+	new_img = cv2.resize(newimg, (500, 509))
 	img = cv2.cvtColor(new_img,1)
 	gray = cv2.cvtColor(new_img, cv2.COLOR_BGR2GRAY)
 	# Detect faces
-	faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+	faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 	# Draw rectangle around the faces
 	for (x, y, w, h) in faces:
 		cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
-	return (img,faces)
+	#return (img,faces)
+	#for (x, y, w, h) in faces:
+		#font = cv2.FONT_HERSHEY_SIMPLEX
+		#cv2.putText(img, 'Face', (x + w, y + h), font, 0.5, (0, 255, 255), 2, cv2.LINE_AA)
+		#cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
+	return (img,faces)   
 def detect_eyes(our_image):
-	new_img = np.array(our_image.convert('RGB'))
+	newimg = np.array(our_image.convert('RGB'))
+	new_img = cv2.resize(newimg, (500, 509))
 	img = cv2.cvtColor(new_img,1)
 	gray = cv2.cvtColor(new_img, cv2.COLOR_BGR2GRAY)
+	faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 	eyes = eye_cascade.detectMultiScale(gray, 1.3, 5)
 	for (ex,ey,ew,eh) in eyes:
 	        cv2.rectangle(img,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+	#for (x, y, w, h) in faces:
+		#font = cv2.FONT_HERSHEY_SIMPLEX
+		#cv2.putText(img, 'eyes', (x + w, y + h), font, 0.5, (0, 255, 255), 2, cv2.LINE_AA)
+		#cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+		#roi_color = img[y:y + h, x:x + w]
+		#roi_gray = gray[y:y + h, x:x + w]
+		#eyes = eye_cascade.detectMultiScale(roi_gray)
+
+		#for (ex, ey, ew, eh) in eyes:
+			#cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 0, 255), 2) 
 	return img
 
 def detect_smiles(our_image):
-	new_img = np.array(our_image.convert('RGB'))
+	newimg = np.array(our_image.convert('RGB'))
+	new_img = cv2.resize(newimg, (500, 509))
 	img = cv2.cvtColor(new_img,1)
 	gray = cv2.cvtColor(new_img, cv2.COLOR_BGR2GRAY)
 	# Detect Smiles
-	smiles = smile_cascade.detectMultiScale(gray, 1.1, 4)
+	smiles = smile_cascade.detectMultiScale(gray, 1.2, 25)
 	# Draw rectangle around the Smiles
 	for (x, y, w, h) in smiles:
 	    cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
 	return img
 def cartonize_image(our_image):
-	new_img = np.array(our_image.convert('RGB'))
+	newimg = np.array(our_image.convert('RGB'))
+	new_img = cv2.resize(newimg, (500, 509))
 	img = cv2.cvtColor(new_img,1)
 	gray = cv2.cvtColor(new_img, cv2.COLOR_BGR2GRAY)
 	# Edges
@@ -61,7 +85,8 @@ def cartonize_image(our_image):
 	return cartoon
 
 def cannize_image(our_image):
-	new_img = np.array(our_image.convert('RGB'))
+	newimg = np.array(our_image.convert('RGB'))
+	new_img = cv2.resize(newimg, (500, 509))
 	img = cv2.cvtColor(new_img,1)
 	img = cv2.GaussianBlur(img, (11, 11), 0)
 	canny = cv2.Canny(img, 100, 150)
@@ -82,15 +107,17 @@ def main():
 	if choice == 'Detection':
 		st.subheader("Face Detection")
 
-		image_file = st.file_uploader("Upload Image",type=['jpg','png','jpeg'])
+		image_file = st.file_uploader("Upload Image",type=['jpg','png','jpeg','webp'])
 
 		if image_file is not None:
 			our_image= Image.open(image_file)
+			#st.image(our_image,300)
 			st.text('Original Image')
 			#st.write(type(our_image))
-			st.image(our_image)
-
+			#st.image(our_image,300)
+	
 		enhance_type= st.sidebar.radio('Enhance Type',['Original','Gray-Scale','Contrast','Brightness','Blurring'])
+		
 		if enhance_type == 'Gray-Scale':		
 			new_img = np.array(our_image.convert('RGB'))
 			img =cv2.cvtColor(new_img,1)
@@ -115,14 +142,15 @@ def main():
 			blur_img=cv2.GaussianBlur((img),(11,11),blur_rate)
 			st.image(blur_img)
 
-		#elif enhance_type == 'Original':
-			#st.image(our_image,width=300)
-		#elif:
-			#st.image(our_image,width=300)
-
+		#if image_file is not None:
+			#our_image= Image.open(image_file)
+			#st.text('Original Image')
+			#if enhance_type == 'Original':
+				#st.image(our_image,width=300)
+		
 
 		# Face detection
-		task =['Faces','Smiles','Eyes','Cannize','Cartonize']
+		task =['Faces','Smiles','Eyes','Canonize','Cartoonize']
 		feature_choice=st.sidebar.selectbox('Find Features',task)
 		if st.button('Process'):
 
@@ -154,9 +182,11 @@ def main():
 
 
 	elif choice == 'About':
-		st.subheader("About Face Detection App")
+		st.subheader("Face Detection App detects faces, smiles and eyes also can provide various features for inserted picture, in order to make changes in it.")
+		st.text("Here is my email ID")
+		st.success("samriddhi100mit@gmal.com")
 
 		
 
 if __name__ == '__main__':
-		main()	
+	main()	
