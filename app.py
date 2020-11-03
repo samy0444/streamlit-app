@@ -5,7 +5,7 @@ import numpy as np
 import os
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
-
+st.write(st.config.get_option("server.enableCORS"))
 @st.cache
 try:
 	face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
