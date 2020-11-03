@@ -6,7 +6,7 @@ import os
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
 st.write(st.config.get_option("server.enableCORS"))
-@st.cache
+
 try:
 	face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
 	eye_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_eye.xml')
@@ -14,7 +14,7 @@ try:
 except Exception:
 	st.write("Error loading cascade classifiers")
 
-
+@st.cache
 def detect_faces(our_image):
 	newimg = np.array(our_image.convert('RGB'))
 	new_img = cv2.resize(newimg, (500, 509))
