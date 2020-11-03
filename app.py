@@ -14,7 +14,6 @@ try:
 except Exception:
 	st.write("Error loading cascade classifiers")
 
-@st.cache
 def detect_faces(our_image):
 	newimg = np.array(our_image.convert('RGB'))
 	new_img = cv2.resize(newimg, (500, 509))
