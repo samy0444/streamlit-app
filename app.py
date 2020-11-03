@@ -7,9 +7,6 @@ import os
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
 @st.cache
-def load_image(img):
-	im= Image.open(img)
-	return im
 try:
 	face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
 	eye_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_eye.xml')
@@ -68,14 +65,6 @@ def cartoonize_image(our_image):
 
 	return cartoon
 
-def canonize_image(our_image):
-	newimg = np.array(our_image.convert('RGB'))
-	new_img = cv2.resize(newimg, (500, 509))
-	img = cv2.cvtColor(new_img,1)
-	img = cv2.GaussianBlur(img, (11, 11), 0)
-	canny = cv2.Canny(img, 100, 150)
-	return canny
-
 def main():
 	"""Face Detection App"""
 
@@ -121,7 +110,7 @@ def main():
 
 
 		# Face detection
-		task =['Faces','Smiles','Eyes','Canonize','Cartoonize']
+		task =['Faces','Smiles','Eyes','Cartoonize']
 		feature_choice=st.sidebar.selectbox('Find Features',task)
 		if st.button('Process'):
 
@@ -143,11 +132,6 @@ def main():
 			elif feature_choice == 'Cartoonize':
 				result_img = cartoonize_image(our_image)
 				st.image(result_img)
-
-			elif feature_choice == 'Canonize':
-				result_canny = canonize_image(our_image)
-				st.image(result_canny)
-
 
 
 	elif choice == 'About':
