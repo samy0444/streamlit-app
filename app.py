@@ -7,10 +7,7 @@ import os
 st.set_option('deprecation.showfileUploaderEncoding', False)
 st.write(st.config.get_option("server.enableCORS"))
 
-@st.cache
-def load_image(img):
-	im= Image.open(img)
-	return im
+
 try:
 	face_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
 	eye_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_eye.xml')
@@ -117,13 +114,6 @@ def main():
 			enhancer=ImageEnhance.Brightness(our_image)
 			img_output=enhancer.enhance(c_rate)
 			st.image(img_output)
-
-		elif enhance_type == 'Blurring':
-			new_img = np.array(our_image.convert('RGB'))
-			blur_rate=st.sidebar.slider('Brightness',0.5,3.5)
-			img =cv2.cvtColor(new_img,1)
-			blur_img=cv2.GaussianBlur((img),(11,11),blur_rate)
-			st.image(blur_img)
 
 
 		# Face detection
