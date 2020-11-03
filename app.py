@@ -7,7 +7,7 @@ import os
 st.set_option('deprecation.showfileUploaderEncoding', False)
 st.write(st.config.get_option("server.enableCORS"))
 
-#@st.cache
+@st.cache
 #def load_image(img):
 	#im= Image.open(img)
 	#return im
