@@ -5,7 +5,6 @@ import numpy as np
 import os
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
-st.write(st.config.get_option("server.enableCORS"))
 
 @st.cache
 def load_image(img):
@@ -77,9 +76,6 @@ def canonize_image(our_image):
 	canny = cv2.Canny(img, 100, 150)
 	return canny
 
-
-
-
 def main():
 	"""Face Detection App"""
 
@@ -96,11 +92,7 @@ def main():
 
 		if image_file is not None:
 			our_image= Image.open(image_file)
-			#st.image(our_image,300)
 			st.text('Original Image')
-			#st.write(type(our_image))
-			#st.image(our_image,300)
-	
 		enhance_type= st.sidebar.radio('Enhance Type',['Original','Gray-Scale','Contrast','Brightness','Blurring'])
 		
 		if enhance_type == 'Gray-Scale':		
@@ -158,10 +150,7 @@ def main():
 
 
 
-
-
 	elif choice == 'About':
-		st.subheader("Face Detection App detects faces, smiles and eyes also can provide various features for inserted picture, in order to make changes in it.")
 		st.text("Here is my email ID")
 		st.success("samriddhi100mit@gmal.com")
 
