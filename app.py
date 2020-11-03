@@ -12,7 +12,7 @@ try:
 	eye_cascade=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_eye.xml')
 	smile_cascade= cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_smile.xml')
 except Exception:
-    st.write("Error loading cascade classifiers")
+	st.write("Error loading cascade classifiers")
 
 
 def detect_faces(our_image):
