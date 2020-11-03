@@ -1,4 +1,0 @@
-numpy>=1.19.1
-opencv-python
-Pillow==7.2.0
-streamlit
