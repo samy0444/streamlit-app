@@ -5,7 +5,7 @@ import numpy as np
 import os
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
-st.write(st.config.get_option("server.enableCORS"))
+#st.write(st.config.get_option("server.enableCORS"))
 
 
 try:
